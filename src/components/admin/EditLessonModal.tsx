@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -20,10 +20,11 @@ import { Loader2, Upload, X, FileText } from 'lucide-react';
 const lessonSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
   description: z.string().optional(),
-  order_index: z.number().min(0),
+  // coerce para garantir número mesmo se vier como string
+  order_index: z.coerce.number().min(0),
   video_url: z.string().optional(),
   video_type: z.enum(['youtube', 'upload']).optional(),
-  duration_minutes: z.number().min(0).optional(),
+  duration_minutes: z.coerce.number().min(0).optional(),
 });
 
 type LessonFormData = z.infer<typeof lessonSchema>;
@@ -54,10 +55,23 @@ export function EditLessonModal({ lesson, open, onOpenChange }: EditLessonModalP
       description: lesson.description || '',
       order_index: lesson.order_index,
       video_url: lesson.video_url || '',
-      video_type: lesson.video_type || 'youtube',
+      video_type: (lesson.video_type as 'youtube' | 'upload') || 'youtube',
       duration_minutes: lesson.duration_minutes,
     },
   });
+
+  // 🔑 Sempre que trocar a aula (id), rehidratamos o form com os novos valores.
+  useEffect(() => {
+    reset({
+      title: lesson.title,
+      description: lesson.description || '',
+      order_index: lesson.order_index,
+      video_url: lesson.video_url || '',
+      video_type: (lesson.video_type as 'youtube' | 'upload') || 'youtube',
+      duration_minutes: lesson.duration_minutes,
+    });
+    setMaterialFiles([]); // opcional: limpa seleção de novos arquivos a cada troca de aula
+  }, [lesson.id, reset]);
 
   const videoType = watch('video_type');
 
@@ -120,7 +134,8 @@ export function EditLessonModal({ lesson, open, onOpenChange }: EditLessonModalP
   const removeExistingMaterial = (index: number) => {
     const currentMaterials = lesson.materials || [];
     const updatedMaterials = currentMaterials.filter((_, i) => i !== index);
-    // This would need to be handled with a separate update call
+    // TODO: aqui você pode chamar updateLesson.mutateAsync({ id: lesson.id, materials: updatedMaterials })
+    // se quiser remover imediatamente o material existente
   };
 
   return (
@@ -162,6 +177,9 @@ export function EditLessonModal({ lesson, open, onOpenChange }: EditLessonModalP
               {...register('order_index', { valueAsNumber: true })}
               className="mt-1"
             />
+            {errors.order_index && (
+              <p className="text-sm text-destructive mt-1">{errors.order_index.message as string}</p>
+            )}
           </div>
 
           <div>
@@ -173,13 +191,16 @@ export function EditLessonModal({ lesson, open, onOpenChange }: EditLessonModalP
               {...register('duration_minutes', { valueAsNumber: true })}
               className="mt-1"
             />
+            {errors.duration_minutes && (
+              <p className="text-sm text-destructive mt-1">{errors.duration_minutes.message as string}</p>
+            )}
           </div>
 
           <div>
             <Label htmlFor="video_type">Tipo de Vídeo</Label>
             <Select
               value={videoType}
-              onValueChange={(value: 'youtube' | 'upload') => setValue('video_type', value)}
+              onValueChange={(value: 'youtube' | 'upload') => setValue('video_type', value, { shouldValidate: true })}
             >
               <SelectTrigger className="mt-1">
                 <SelectValue />
