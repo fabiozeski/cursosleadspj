@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Minimal Dark Educational Platform - Discord Style */
+
+@layer base {
+  :root {
+    /* Dark Discord-inspired Colors */
+    --background: 220 13% 18%;
+    --foreground: 210 20% 98%;
+
+    --card: 220 13% 15%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 220 13% 15%;
+    --popover-foreground: 210 20% 98%;
+
+    /* Clean Primary Blue */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 55%;
+    --primary-light: 217 91% 20%;
+
+    /* Success Green for Progress */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 20%;
+
+    /* Warning Orange for Attention */
+    --warning: 43 96% 56%;
+    --warning-foreground: 220 13% 18%;
+    --warning-light: 43 96% 20%;
+
+    --secondary: 220 13% 21%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 220 13% 21%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 13% 21%;
+    --accent-foreground: 217 91% 60%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 28%;
+    --input: 220 13% 21%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.5rem;
+
+    /* Minimal Sidebar Theme */
+    --sidebar-background: 220 13% 12%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 13% 18%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 220 13% 18%;
+    --sidebar-ring: 217 91% 60%;
+
+    /* Video Player Theme */
+    --player-background: 0 0% 0%;
+    --player-controls: 0 0% 15%;
+    --player-text: 0 0% 95%;
+
+    /* Progress Colors */
+    --progress-background: 240 5% 94%;
+    --progress-foreground: 142 76% 36%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 55%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 40%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(142 76% 36%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(240 5% 85% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(240 5% 85% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(240 5% 85% / 0.1);
+    --shadow-primary: 0 10px 25px -5px hsl(217 91% 60% / 0.25);
+
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* Dark mode uses same values as root - always dark theme */
+    --background: 220 13% 18%;
+    --foreground: 210 20% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
